@@ -1,0 +1,55 @@
+name: Build
+
+on:
+  push:
+    branches:
+      - main
+      - release/*
+  pull_request:
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.sha }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up JDK for running Gradle
+        uses: actions/setup-java@v3
+        with:
+          distribution: temurin
+          java-version: 17
+
+      - name: Build
+        uses: gradle/gradle-build-action@v2
+        with:
+          arguments: build
+          cache-read-only: ${{ github.event_name == 'pull_request' }}
+
+      - uses: actions/upload-artifact@v3
+        with:
+          name: Package
+          path: build/libs
+
+      - name: Save unit test results
+        uses: actions/upload-artifact@v3
+        if: always()
+        with:
+          name: test-results
+          path: build/reports/tests/test
+
+  markdown-link-check:
+    uses: ./.github/workflows/reusable-markdown-link-check.yml
+
+  markdown-lint-check:
+    uses: ./.github/workflows/reusable-markdown-lint.yml
+
+  misspell-check:
+    uses: ./.github/workflows/reusable-misspell-check.yml
+
+  shell-script-check:
+    uses: ./.github/workflows/reusable-shell-script-check.yml
