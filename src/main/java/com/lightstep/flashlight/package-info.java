@@ -1,4 +1,4 @@
 @ParametersAreNonnullByDefault
-package com.lightstep.classscanner;
+package com.lightstep.flashlight;
 
 import javax.annotation.ParametersAreNonnullByDefault;

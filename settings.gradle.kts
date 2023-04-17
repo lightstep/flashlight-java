@@ -1,2 +1,2 @@
-rootProject.name = "key-method-scanner-java"
+rootProject.name = "flashlight"
 

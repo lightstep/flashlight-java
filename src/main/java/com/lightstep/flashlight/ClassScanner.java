@@ -1,10 +1,11 @@
-package com.lightstep.classscanner;
+package com.lightstep.flashlight;
 
 import com.google.common.reflect.ClassPath;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
@@ -13,7 +14,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-public class ClassScanner {
+class ClassScanner {
     private final List<URL> targetPaths;
 
     public ClassScanner(List<String> targetPaths) {
@@ -41,10 +42,9 @@ public class ClassScanner {
 
             for (ClassPath.ClassInfo info : ClassPath.from(classLoader).getTopLevelClasses()) {
                 //        System.out.println(info.getName());
-                AnalyzedClass analyzedClass = new AnalyzedClass(
-                        info.getName(),
-                        Objects.requireNonNull(classLoader.getResourceAsStream(info.getResourceName())));
-                if (analyzedClass.isInteresting()) {
+                try (InputStream resource = classLoader.getResourceAsStream(info.getResourceName())) {
+                    AnalyzedClass analyzedClass =
+                            new AnalyzingClassVisitor(info.getName()).analyze(Objects.requireNonNull(resource));
                     analyzedClasses.add(analyzedClass);
                 }
             }

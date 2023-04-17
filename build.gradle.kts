@@ -5,7 +5,7 @@ plugins {
     id("java")
 }
 
-group = "com.lightstep.scanner"
+group = "com.lightstep.flashlight"
 version = "1.0-SNAPSHOT"
 
 repositories {
@@ -15,7 +15,6 @@ repositories {
         url = uri("https://maven.shadew.net/")
     }
 }
-
 
 dependencies {
     implementation("com.google.guava:guava:31.1-jre")
@@ -39,13 +38,21 @@ tasks {
 
     val shadowJar by existing(ShadowJar::class) {
         archiveClassifier.set("")
+        archiveVersion.set("")
 
         manifest {
             attributes(jar.get().manifest.attributes)
-            attributes(
-                    "Main-Class" to "io.opentelemetry.instrumentation.classscanner.ClassScannerMain"
-            )
+            attributes("Main-Class" to "com.lightstep.flashlight.FlashlightMain")
         }
         minimize()
+
+    }
+
+    named("build") {
+        dependsOn(shadowJar)
+    }
+
+    named("jar") {
+        enabled = false
     }
 }
