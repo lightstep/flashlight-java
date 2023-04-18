@@ -17,6 +17,7 @@ repositories {
 }
 
 dependencies {
+    implementation("info.picocli:picocli:4.7.2")
     implementation("com.google.guava:guava:31.1-jre")
     implementation("org.ow2.asm:asm:9.4")
     implementation("org.ow2.asm:asm-util:9.4")
@@ -42,10 +43,11 @@ tasks {
 
         manifest {
             attributes(jar.get().manifest.attributes)
-            attributes("Main-Class" to "com.lightstep.flashlight.FlashlightMain")
+            attributes("Main-Class" to "com.lightstep.flashlight.FlashlightMain",
+                    "Implementation-Title" to "Flashlight",
+                    "Implementation-Version" to project.version)
         }
         minimize()
-
     }
 
     named("build") {

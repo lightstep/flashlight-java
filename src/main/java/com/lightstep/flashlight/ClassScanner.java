@@ -10,6 +10,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -17,9 +18,8 @@ import java.util.stream.Collectors;
 class ClassScanner {
     private final List<URL> targetPaths;
 
-    public ClassScanner(List<String> targetPaths) {
+    public ClassScanner(Collection<File> targetPaths) {
         this.targetPaths = targetPaths.stream()
-                .map(File::new)
                 .peek(file -> {
                     if (!file.exists()) {
                         throw new IllegalArgumentException(new FileNotFoundException(file.getAbsolutePath()));
