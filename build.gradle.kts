@@ -23,6 +23,11 @@ gitVersioning.apply {
     }
 }
 
+java {
+    sourceCompatibility = JavaVersion.VERSION_11
+    targetCompatibility = JavaVersion.VERSION_11
+}
+
 repositories {
     mavenCentral()
     // Needed for https://github.com/FoxSamu/ASM-Descriptor

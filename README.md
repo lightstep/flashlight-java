@@ -1,6 +1,6 @@
 # Flashlight
 
-Flashlight is a command line tool that scans the provided classpath
+Flashlight is a command line tool that scans the provided java classpath
 and identifies 'interesting' methods to instrument with OpenTelemetry.
 
 ## Installation
@@ -9,16 +9,16 @@ Download the [latest release](https://github.com/lightstep/flashlight-java/relea
 
 ## Usage
 
-Gradle:
-
-```shell
-java -jar flashlight.jar **/build/classes/java/main/
-```
-
 Maven:
 
 ```shell
 java -jar flashlight.jar **/target/classes/
+```
+
+Gradle:
+
+```shell
+java -jar flashlight.jar **/build/classes/java/main/
 ```
 
 All options:

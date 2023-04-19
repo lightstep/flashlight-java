@@ -42,9 +42,10 @@ class AnalyzedClassTest {
     @Test
     void ignoredMethods() {
         Runnable subject = new Runnable() {
-            static {
-                new SomeClient().call();
-            }
+            // Requires Java 16+
+            // static {
+            //     new SomeClient().call();
+            // }
 
             {
                 new SomeClient().call();
@@ -77,7 +78,7 @@ class AnalyzedClassTest {
                 analyzedClass.methodsWithClientCalls(
                         new MethodNameFilter("<init>", "<clinit>", "toString", "hashCode", "equals")));
         assertEquals(
-                Set.of("<init>", "<clinit>", "toString", "hashCode", "equals"),
+                Set.of("<init>", /*"<clinit>",*/ "toString", "hashCode", "equals"),
                 analyzedClass.methodsWithClientCalls(FILTER));
     }
 

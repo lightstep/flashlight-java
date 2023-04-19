@@ -11,17 +11,16 @@ import java.util.TreeMap;
 import java.util.concurrent.Callable;
 
 import static java.util.Map.entry;
+import static java.util.stream.Collectors.toList;
 
 @CommandLine.Command(
         name = "java -jar flashlight.jar",
         mixinStandardHelpOptions = true,
         versionProvider = ManifestVersion.class,
         description =
-                """
-                Scans the provided classpath and identifies 'interesting' methods to instrument with OpenTelemetry.
-                 Gradle: java -jar flashlight.jar **/build/classes/java/main/
-                 Maven:  java -jar flashlight.jar **/target/classes/
-                 """)
+                "Scans the provided classpath and identifies 'interesting' methods to instrument with OpenTelemetry.\n"
+                        + " Gradle: java -jar flashlight.jar **/build/classes/java/main/\n"
+                        + " Maven:  java -jar flashlight.jar **/target/classes/\n")
 public class FlashlightMain implements Callable<Integer> {
 
     private static final MethodNameFilter EXCLUDED_METHODS =
@@ -72,33 +71,33 @@ public class FlashlightMain implements Callable<Integer> {
                 .map(analyzedClass ->
                         entry(analyzedClass.getClassName(), analyzedClass.methodsWithSynchronize(EXCLUDED_METHODS)))
                 .filter(analyzedClass -> !analyzedClass.getValue().isEmpty())
-                .toList();
+                .collect(toList());
 
         List<Map.Entry<String, Set<String>>> methodsWithClientCalls = analyzedClasses.stream()
                 .map(analyzedClass ->
                         entry(analyzedClass.getClassName(), analyzedClass.methodsWithClientCalls(EXCLUDED_METHODS)))
                 .filter(analyzedClass -> !analyzedClass.getValue().isEmpty())
-                .toList();
+                .collect(toList());
 
         List<Map.Entry<String, Set<String>>> methodsWithRepositoryCalls = analyzedClasses.stream()
                 .map(analyzedClass ->
                         entry(analyzedClass.getClassName(), analyzedClass.methodsWithRepositoryCalls(EXCLUDED_METHODS)))
                 .filter(analyzedClass -> !analyzedClass.getValue().isEmpty())
-                .toList();
+                .collect(toList());
 
         List<Map.Entry<String, Set<String>>> methodsWithHighMethodCount = analyzedClasses.stream()
                 .map(analyzedClass -> entry(
                         analyzedClass.getClassName(),
                         analyzedClass.methodsWithHighMethodCount(methodInstructionCountThreshold, EXCLUDED_METHODS)))
                 .filter(analyzedClass -> !analyzedClass.getValue().isEmpty())
-                .toList();
+                .collect(toList());
 
         List<Map.Entry<String, Set<String>>> methodsWithHighBranchCount = analyzedClasses.stream()
                 .map(analyzedClass -> entry(
                         analyzedClass.getClassName(),
                         analyzedClass.methodsWithHighBranchCount(branchInstructionCountThreshold, EXCLUDED_METHODS)))
                 .filter(analyzedClass -> !analyzedClass.getValue().isEmpty())
-                .toList();
+                .collect(toList());
 
         TreeMap<String, Set<String>> methods = new TreeMap<>();
         methodsWithSynchronize.forEach(entry -> methods.merge(entry.getKey(), entry.getValue(), Sets::union));
