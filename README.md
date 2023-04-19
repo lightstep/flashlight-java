@@ -5,21 +5,24 @@ and identifies 'interesting' methods to instrument with OpenTelemetry.
 
 ## Installation
 
-Download the [latest release](/releases/latest/download/flashlight.jar).
+Download the [latest release](https://github.com/lightstep/flashlight-java/releases/latest/download/flashlight.jar).
 
 ## Usage
 
 Gradle:
+
 ```shell
 java -jar flashlight.jar **/build/classes/java/main/
 ```
 
 Maven:
+
 ```shell
 java -jar flashlight.jar **/target/classes/
 ```
 
 All options:
+
 ```shell
 java -jar flashlight.jar [-hV] [-b=NUMBER] [-c=NUMBER] <paths>...
 ```

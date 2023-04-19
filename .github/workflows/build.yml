@@ -27,8 +27,7 @@ jobs:
       - name: Build
         uses: gradle/gradle-build-action@v2
         with:
-          arguments: build
-          cache-read-only: ${{ github.event_name == 'pull_request' }}
+          arguments: build --scan
 
       - uses: actions/upload-artifact@v3
         with:
@@ -41,8 +40,9 @@ jobs:
           name: test-results
           path: build/reports/tests/test
 
-  markdown-link-check:
-    uses: ./.github/workflows/reusable-markdown-link-check.yml
+# Skip until project made public... release link currently reports 404 if not authenticated.
+#  markdown-link-check:
+#    uses: ./.github/workflows/reusable-markdown-link-check.yml
 
   markdown-lint-check:
     uses: ./.github/workflows/reusable-markdown-lint.yml

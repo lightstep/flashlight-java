@@ -22,11 +22,12 @@ jobs:
       - name: Build
         uses: gradle/gradle-build-action@v2
         with:
-          arguments: build
+          arguments: build --scan
 
       - name: Save build artifact
         uses: actions/upload-artifact@v3
         with:
+          name: flashlight.jar
           path: build/libs/flashlight.jar
 
       - name: Save test results
@@ -34,7 +35,7 @@ jobs:
         if: always()
         with:
           name: test-results
-          path: jmx-metrics/build/reports/tests/test
+          path: build/reports/tests/test
 
       - name: Release
         uses: softprops/action-gh-release@v1
