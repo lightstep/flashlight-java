@@ -32,8 +32,7 @@ jobs:
 
       - uses: actions/upload-artifact@v3
         with:
-          name: Package
-          path: build/libs
+          path: build/libs/flashlight.jar
 
       - name: Save unit test results
         uses: actions/upload-artifact@v3

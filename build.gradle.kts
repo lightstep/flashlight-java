@@ -2,11 +2,26 @@ import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 
 plugins {
     id("com.github.johnrengelman.shadow") version "8.1.1"
+    id("me.qoomon.git-versioning") version "6.4.2"
+
     id("java")
 }
 
 group = "com.lightstep.flashlight"
-version = "1.0-SNAPSHOT"
+version = "0.0.0-SNAPSHOT"
+gitVersioning.apply {
+    refs {
+        branch(".+") {
+            version = "\${ref}-SNAPSHOT"
+        }
+        tag("v(?<version>.*)") {
+            version = "\${ref.version}"
+        }
+    }
+    rev {
+        version = "\${commit}"
+    }
+}
 
 repositories {
     mavenCentral()
@@ -30,7 +45,6 @@ dependencies {
     testImplementation("org.junit.jupiter:junit-jupiter-api:5.8.1")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.8.1")
 }
-
 
 tasks {
     getByName<Test>("test") {
